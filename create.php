@@ -1,6 +1,7 @@
 <?php
 include_once("templates/header.php");
 ?>
+
 <div class="container">
 <?php include_once("templates/backbtn.html"); ?>
 <h1 id="main-title">Cadastra alunos</h1>
@@ -16,7 +17,7 @@ include_once("templates/header.php");
       </div>
       <div class="form-group">
         <label for="telefone">Telefone de contato:</label>
-        <input type="text" class="form-control" id="telefone" name="telefone" placeholder="Digite o telefone" required>
+        <input type="text" class="form-control" id="telefone" name="telefone" oninput="formataCell(this)" maxlength="12" placeholder="Digite o telefone" required>
       </div>
       <div class="form-group">
         <label for="cpf">CPF do aluno:</label>
@@ -42,17 +43,17 @@ include_once("templates/header.php");
 
       <div class="form-group">
                         <label for="curso">Curso: </label>
-                        <select type= "text" class="form-control" name="curso" id="curso" required>
-                            <option>Introdução ao P. de /Dados</option>
-                            <option>Windows 10</option>
-                            <option>Internet - Mod 1 e Mod 2</option>
-                            <option>Multimidia</option>
-                            <option>Word 2019</option>
-                            <option>Excel 2019</option>
-                            <option>Matematica financeira - Excel</option>
-                            <option>PowerPoint 2019</option>
-                            <option>Outlook 2013</option>
-                            <option>Empregabilidade</option>
+                        <select class="form-control" name="cursos[]" id="cursos" multiple="multiple" style="width: 100%;">
+                            <option value="Introdução ao P. de Dados">Introdução ao P. de Dados</option>
+                            <option value="Windows 10">Windows 10</option>
+                            <option value="Internet - Mod 1 e Mod 2">Internet - Mod 1 e Mod 2</option>
+                            <option value="Multimidia">Multimidia</option>
+                            <option value="Word 2019" >Word 2019</option>
+                            <option value="Excel 2019" >Excel 2019</option>
+                            <option value="Matematica financeira - Excel" >Matematica financeira - Excel</option>
+                            <option value="PowerPoint 2019" >PowerPoint 2019</option>
+                            <option value="Outlook 2013" >Outlook 2013</option>
+                            <option value="Empregabilidade" >Empregabilidade</option>
                         </select>
                     </div>
 

@@ -5,6 +5,43 @@ session_start();
 include_once("connection.php");
 include_once("url.php");
 
+// Função para validar CPF
+function validarCPF($cpf) {
+  // Limpar caracteres não numéricos
+  $cpf = preg_replace("/[^0-9]/", "", $cpf);
+
+  // Verificar se o CPF tem 11 dígitos
+  if (strlen($cpf) != 11) {
+      return false;
+  }
+
+  // Verificar se todos os dígitos são iguais
+  if (preg_match('/^(\d)\1*$/', $cpf)) {
+      return false;
+  }
+
+  // Calcular os dígitos verificadores
+  for ($i = 0, $j = 10, $soma1 = 0; $i < 9; $i++, $j--) {
+      $soma1 += $cpf[$i] * $j;
+  }
+
+  $digito1 = ($soma1 % 11 < 2) ? 0 : 11 - ($soma1 % 11);
+
+  for ($i = 0, $j = 11, $soma2 = 0; $i < 10; $i++, $j--) {
+      $soma2 += $cpf[$i] * $j;
+  }
+
+  $digito2 = ($soma2 % 11 < 2) ? 0 : 11 - ($soma2 % 11);
+
+  // Verificar os dígitos verificadores
+  return ($digito1 == $cpf[9] && $digito2 == $cpf[10]);
+}
+
+// Função para formatar CPF
+function maskCPF($cpf){
+  return substr($cpf, 0, 3) . '.' . substr($cpf, 3, 3) . '.' . substr($cpf, 6, 3) . '-' . substr($cpf, 9, 2);
+}
+
 
 $data = $_POST;
 
@@ -27,6 +64,8 @@ if(!empty($data)) {
     $horario = $data["horario"];
     $observacao = $data["observacao"];
 
+    $cursos = implode(", ", $data["cursos"]);
+
     $query = "INSERT INTO testes (nome, responsavel, telefone, cpf, cpf_responsavel, endereco, email, cadastro, curso, dias, horario, observacao ) VALUES (:nome, :responsavel, :telefone, :cpf, :cpf_responsavel, :endereco, :email, :cadastro, :curso, :dias, :horario, :observacao)";
 
     $stmt = $conn->prepare($query);
@@ -43,6 +82,27 @@ if(!empty($data)) {
     $stmt->bindParam(":dias", $dias);
     $stmt->bindParam(":horario", $horario);
     $stmt->bindParam(":observacao", $observacao);
+
+    
+     // Validar CPF do aluno
+     $cpfAluno = $data["cpf"];
+     if (!validarCPF($cpfAluno)) {
+         $_SESSION["msg"] = "CPF do aluno inválido. Por favor, insira um CPF válido.";
+         header("Location:" . $BASE_URL . "../index.php");
+         exit();
+     }
+
+     // Validar CPF do responsável
+     $cpfResponsavel = $data["cpf_responsavel"];
+     if (!validarCPF($cpfResponsavel)) {
+         $_SESSION["msg"] = "CPF do responsável inválido. Por favor, insira um CPF válido.";
+         header("Location:" . $BASE_URL . "../index.php");
+         exit();
+     }
+
+     // Formatando CPF antes de salvar no banco
+     $cpfFormatado = maskCPF($cpf);
+     $cpfResponsavelFormatado = maskCPF($cpf_responsavel);
 
     try {
 
