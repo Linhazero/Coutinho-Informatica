@@ -59,17 +59,18 @@ if(!empty($data)) {
     $endereco = $data["endereco"];
     $email = $data["email"];
     $cadastro = $data["cadastro"];
-    $curso = $data["curso"];
+    $cursos = $data["cursos"];
     $dias = $data["dias"];
     $horario = $data["horario"];
     $observacao = $data["observacao"];
 
-    $cursos = implode(", ", $data["cursos"]);
+         // Serializar array de cursos
+         $cursos_serialized = json_encode($cursos);
 
-    $query = "INSERT INTO testes (nome, responsavel, telefone, cpf, cpf_responsavel, endereco, email, cadastro, curso, dias, horario, observacao ) VALUES (:nome, :responsavel, :telefone, :cpf, :cpf_responsavel, :endereco, :email, :cadastro, :curso, :dias, :horario, :observacao)";
+    $query = "INSERT INTO testes (nome, responsavel, telefone, cpf, cpf_responsavel, endereco, email, cadastro, curso, dias, horario, observacao ) VALUES (:nome, :responsavel, :telefone, :cpf, :cpf_responsavel, :endereco, :email, :cadastro, :cursos_serialized, :dias, :horario, :observacao)";
 
     $stmt = $conn->prepare($query);
-
+  
     $stmt->bindParam(":nome", $nome);
     $stmt->bindParam(":responsavel", $responsavel);
     $stmt->bindParam(":telefone", $telefone);
@@ -78,43 +79,42 @@ if(!empty($data)) {
     $stmt->bindParam(":endereco", $endereco);
     $stmt->bindParam(":email", $email);
     $stmt->bindParam(":cadastro", $cadastro);
-    $stmt->bindParam(":curso", $curso);
+    $stmt->bindParam(":cursos_serialized", $cursos_serialized);
     $stmt->bindParam(":dias", $dias);
     $stmt->bindParam(":horario", $horario);
     $stmt->bindParam(":observacao", $observacao);
-
-    
-     // Validar CPF do aluno
-     $cpfAluno = $data["cpf"];
-     if (!validarCPF($cpfAluno)) {
-         $_SESSION["msg"] = "CPF do aluno inválido. Por favor, insira um CPF válido.";
-         header("Location:" . $BASE_URL . "../index.php");
-         exit();
-     }
-
-     // Validar CPF do responsável
-     $cpfResponsavel = $data["cpf_responsavel"];
-     if (!validarCPF($cpfResponsavel)) {
-         $_SESSION["msg"] = "CPF do responsável inválido. Por favor, insira um CPF válido.";
-         header("Location:" . $BASE_URL . "../index.php");
-         exit();
-     }
-
-     // Formatando CPF antes de salvar no banco
-     $cpfFormatado = maskCPF($cpf);
-     $cpfResponsavelFormatado = maskCPF($cpf_responsavel);
-
-    try {
-
-      $stmt->execute();
-      $_SESSION["msg"] = "Aluno cadastrado com sucesso!";
-  
-    } catch(PDOException $e) {
-      // erro na conexão
-      $error = $e->getMessage();
-      echo "Erro: $error";
+      
+    // Validar CPF do aluno
+    $cpfAluno = $data["cpf"];
+    if (!validarCPF($cpfAluno)) {
+        $_SESSION["msg"] = "CPF do aluno inválido. Por favor, insira um CPF válido.";
+        header("Location:" . $BASE_URL . "../index.php");
+        exit();
     }
-    
+
+    // Validar CPF do responsável
+    $cpfResponsavel = $data["cpf_responsavel"];
+    if (!validarCPF($cpfResponsavel)) {
+        $_SESSION["msg"] = "CPF do responsável inválido. Por favor, insira um CPF válido.";
+        header("Location:" . $BASE_URL . "../index.php");
+        exit();
+    }
+
+    // Formatando CPF antes de salvar no banco
+    $cpfFormatado = maskCPF($cpf);
+    $cpfResponsavelFormatado = maskCPF($cpf_responsavel);
+
+   try {
+
+     $stmt->execute();
+     $_SESSION["msg"] = "Aluno cadastrado com sucesso!";
+ 
+   } catch(PDOException $e) {
+     // erro na conexão
+     $error = $e->getMessage();
+     echo "Erro: $error";
+   }
+  
     //atualizando contato
   } else if($data["type"] === "edit") {
 
@@ -230,4 +230,6 @@ if(!empty($data)) {
 }
 
 // FECHAR CONEXÃO
+$conn = null;
+
 $conn = null;

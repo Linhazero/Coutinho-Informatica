@@ -43,7 +43,7 @@ include_once("templates/header.php");
 
       <div class="form-group">
                         <label for="curso">Curso: </label>
-                        <select class="form-control" name="cursos[]" id="cursos" multiple="multiple" style="width: 100%;">
+                        <select class="form-control" name="cursos[]" id="cursos" multiple required>
                             <option value="Introdução ao P. de Dados">Introdução ao P. de Dados</option>
                             <option value="Windows 10">Windows 10</option>
                             <option value="Internet - Mod 1 e Mod 2">Internet - Mod 1 e Mod 2</option>

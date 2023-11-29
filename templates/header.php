@@ -23,17 +23,25 @@ include_once("config/process.php");
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- CSS -->
     <link rel="stylesheet" href="<?= $BASE_URL ?>css/styles.css">
-    <!-- Adicione as bibliotecas jQuery e jQuery Mask Plugin -->
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      // Adicione a máscara ao campo de Telefone e CPF
-      $('#telefone').mask('(00)00000-0000');
-      $('#cpf').mask('000.000.000-00', { reverse: true });
-      $('#cpf_responsavel').mask('000.000.000-00', { reverse: true });
-    });
-</script>
+     <!-- Adicione as bibliotecas jQuery e Select2 -->
+     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"></script>
+    <!-- Adicione a máscara ao campo de Telefone e CPF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#telefone').mask('(00)00000-0000');
+            $('#cpf').mask('000.000.000-00', { reverse: true });
+            $('#cpf_responsavel').mask('000.000.000-00', { reverse: true });
+
+            // Ative o plugin Select2 na caixa de seleção de cursos
+            $('#cursos').select2({
+                width: 'resolve', // Ajusta automaticamente a largura
+                placeholder: 'Selecione os cursos', // Mensagem de espaço reservado
+            });
+        });
+    </script>
 
 </head>
 <body>

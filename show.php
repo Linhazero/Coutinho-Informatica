@@ -28,14 +28,14 @@
     <p class="bold">Data Cadastro:</p>
     <p><?= $info["cadastro"] ?></p>
 
-    <p class="bold">Curso:</p>
+    <p class="bold">Cursos:</p>
     <p><?= $info["curso"] ?></p>
 
     <p class="bold">Dias de aula:</p>
     <p><?= $info["dias"] ?></p>
 
     <p class="bold">Horario:</p>
-    <p><?= $info["curso"] ?></p>
+    <p><?= $info["horario"] ?></p>
 
     <p class="bold">Observações:</p>
     <p><?= $info["observacao"] ?></p>
